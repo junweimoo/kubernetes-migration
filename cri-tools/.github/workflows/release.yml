@@ -1,0 +1,35 @@
+name: release
+on:
+  push:
+    tags:
+      - "*"
+env:
+  GO_VERSION: '1.23'
+jobs:
+  publish:
+    name: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - run: make release-notes release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
+        with:
+          allowUpdates: true
+          artifacts: _output/releases/*
+          bodyFile: release-notes.md
+          token: ${{ secrets.GH_TOKEN }}
+      - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        with:
+          name: release-notes
+          path: release-notes.md
+      - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        with:
+          name: build-artifacts
+          path: _output

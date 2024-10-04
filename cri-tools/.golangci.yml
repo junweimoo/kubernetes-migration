@@ -1,0 +1,144 @@
+---
+run:
+  concurrency: 6
+  timeout: 5m
+linters:
+  disable-all: true
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - canonicalheader
+    - containedctx
+    - contextcheck
+    - copyloopvar
+    - cyclop
+    - decorder
+    - dogsled
+    - dupl
+    - dupword
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - fatcontext
+    - forcetypeassert
+    - gci
+    - ginkgolinter
+    - gocheckcompilerdirectives
+    - gochecksumtype
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+    - godox
+    - gofmt
+    - gofumpt
+    - goheader
+    - goimports
+    - gomoddirectives
+    - gomodguard
+    - goprintffuncname
+    - gosimple
+    - gosmopolitan
+    - govet
+    - grouper
+    - importas
+    - inamedparam
+    - ineffassign
+    - interfacebloat
+    - intrange
+    - loggercheck
+    - maintidx
+    - makezero
+    - mirror
+    - misspell
+    - musttag
+    - nakedret
+    - nestif
+    - nilerr
+    - noctx
+    - nolintlint
+    - nosprintfhostport
+    - paralleltest
+    - perfsprint
+    - prealloc
+    - predeclared
+    - promlinter
+    - protogetter
+    - reassign
+    - revive
+    - rowserrcheck
+    - sloglint
+    - spancheck
+    - sqlclosecheck
+    - staticcheck
+    - stylecheck
+    - tagalign
+    - tagliatelle
+    - tenv
+    - testableexamples
+    - testifylint
+    - tparallel
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+    - zerologlint
+    # - depguard
+    # - err113
+    # - exhaustruct
+    # - forbidigo
+    # - funlen
+    # - gochecknoglobals
+    # - gochecknoinits
+    # - gosec
+    # - ireturn
+    # - lll
+    # - mnd
+    # - nilnil
+    # - nlreturn
+    # - nonamedreturns
+    # - testpackage
+    # - thelper
+    # - varnamelen
+    # - wrapcheck
+    # - wsl
+linters-settings:
+  stylecheck:
+    checks:
+      - all
+      - -ST1001  # dot imports
+  revive:
+    rules:
+      - name: dot-imports
+        disabled: true
+  nestif:
+    min-complexity: 17
+  godox:
+    keywords:
+      - BUG
+      - FIXME
+      - HACK
+  gocyclo:
+    min-complexity: 35
+  cyclop:
+    max-complexity: 37
+  gocognit:
+    min-complexity: 53
+  gci:
+    sections:
+      - standard
+      - default
+      - localmodule
+  staticcheck:
+    checks: ["SA1019"]
+  gocritic:
+    enable-all: true

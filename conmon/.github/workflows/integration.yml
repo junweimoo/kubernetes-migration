@@ -1,0 +1,54 @@
+name: integration
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+  pull_request:
+jobs:
+  conmon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-integration-conmon-${{ hashFiles('**/go.mod') }}
+          restore-keys: go-integration-conmon-
+      - run: sudo hack/github-actions-setup
+      - name: Run conmon integration tests
+        run: |
+          sudo make vendor
+          sudo mkdir -p /var/run/crio
+          sudo make test-binary
+
+  cri-o:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-integration-cri-o-${{ hashFiles('**/go.mod') }}
+          restore-keys: go-integration-cri-o-
+      - run: sudo hack/github-actions-setup
+      - name: Run CRI-O integration tests
+        run: |
+          CRIO_DIR=$(sudo go env GOPATH)/src/github.com/cri-o/cri-o
+          sudo make -C "$CRIO_DIR" all test-binaries
+          # skip seccomp tests because they have permission denied issues in a container and accept signed image as they don't use conmon
+          sudo rm -f "$CRIO_DIR"/test/seccomp*.bats "$CRIO_DIR"/test/image.bats "$CRIO_DIR"/test/policy.bats
+          sudo sh -c "cd $CRIO_DIR; ./test/test_runner.sh"
+        env:
+          JOBS: '2'

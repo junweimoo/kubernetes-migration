@@ -1,0 +1,18 @@
+# For documentation, see https://golangci-lint.run/usage/configuration/
+
+run:
+  build-tags:
+    - seccomp
+    - runc_nodmz
+
+linters:
+  enable:
+    - gofumpt
+    - errorlint
+    - unconvert
+    - unparam
+
+linters-settings:
+  govet:
+    enable:
+      - nilness
